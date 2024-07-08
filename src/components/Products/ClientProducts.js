@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getProducts, addProduct } from '../../api/api';
 import { show_alert } from '../functions';
 
-const EditProducts = () => {
+const ClientProducts = () => {
     const [productos, setProductos] = useState([]);
     const [newProduct, setNewProduct] = useState({
         nombre: '',
@@ -12,6 +12,7 @@ const EditProducts = () => {
         url_imagen: ''
     });
     const [title, setTitle] = useState('');
+    const [productosComprados, setProductosComprados] = useState([]);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -34,19 +35,28 @@ const EditProducts = () => {
         }
     };
 
-    const openModal = (op,nombre,precio,sku,stock,url_imagen) => {
-        if (op===1){
+    const openModal = (op, nombre, precio, sku, stock, url_imagen) => {
+        if (op === 1) {
             setTitle("Añadir Productos");
             setNewProduct({ nombre: '', precio: '', sku: '', stock: '', url_imagen: '' });
-        }
-        else if(op === 2){
+        } else if (op === 2) {
             setTitle("Editar Productos");
-            setNewProduct({nombre:nombre,precio:precio,sku:sku,stock:stock,url_imagen:url_imagen})
-        }
-        else if(op === 3){
+            setNewProduct({ nombre: nombre, precio: precio, sku: sku, stock: stock, url_imagen: url_imagen })
+        } else if (op === 3) {
             setTitle("Eliminar Producto");
         }
-        
+
+    };
+
+    const comprarProducto = (productoId) => {
+        // Verifica si el producto ya ha sido comprado
+        if (!productosComprados.includes(productoId)) {
+            // Agrega el producto a la lista de comprados
+            setProductosComprados([...productosComprados, productoId]);
+            show_alert('Producto comprado correctamente.', 'success');
+        } else {
+            show_alert('Este producto ya ha sido comprado.', 'danger');
+        }
     };
 
     return (
@@ -55,8 +65,8 @@ const EditProducts = () => {
             <div className='row justify-content-center mt-3'>
                 <div className='col-12 col-lg-8'>
                     <div className='table-responsive'>
-                        <table className="table text-center">
-                            <thead>
+                        <table className="table table-bordered text-center">
+                            <thead className="table-dark">
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Nombre</th>
@@ -69,49 +79,25 @@ const EditProducts = () => {
                             <tbody>
                                 {productos.map((producto, index) => (
                                     <tr key={producto.id}>
-                                        <th scope="row">{index + 1}</th>
+                                        <td>{index + 1}</td>
                                         <td>{producto.nombre}</td>
                                         <td>{producto.precio}</td>
                                         <td>{producto.sku}</td>
                                         <td>{producto.stock}</td>
                                         <td>
-                                            <button 
-                                                className='btn btn-warning' 
-                                                onClick={() => openModal(2,producto.nombre,producto.precio,producto.sku,producto.stock,producto.url_imagen)} 
-                                                data-bs-toggle='modal' 
-                                                data-bs-target='#modalProducts'
+                                            <button
+                                                className={`btn btn-success ${productosComprados.includes(producto.id) ? 'disabled' : ''}`}
+                                                onClick={() => comprarProducto(producto.id)}
+                                                disabled={productosComprados.includes(producto.id)}
                                             >
-                                                <i className='fa-solid fa-edit'></i>
+                                                <i className='fas fa-shopping-cart'></i> Comprar
                                             </button>
-                                            &nbsp;
-                                            <button 
-                                                className='btn btn-danger' 
-                                                onClick={() => openModal('Eliminar Producto')} 
-                                                data-bs-toggle='modal' 
-                                                data-bs-target='#modalProducts'
-                                            >
-                                                <i className='fa-solid fa-trash'></i>
-                                            </button>
+                                   
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
-            <div className="row mt-3">
-                <div className='col-md-4 offset-md-4'>
-                    <div className='d-grid mx-auto'>
-                        <button 
-                            onClick={() => openModal(1)} 
-                            type="button" 
-                            className="btn btn-primary" 
-                            data-bs-toggle='modal' 
-                            data-bs-target='#modalProducts'
-                        >
-                            <i className='fa-solid fa-circle-plus'></i> Añadir
-                        </button>
                     </div>
                 </div>
             </div>
@@ -155,4 +141,4 @@ const EditProducts = () => {
     );
 };
 
-export default EditProducts;
+export default ClientProducts;

@@ -83,3 +83,14 @@ export const addProduct = async (productData) => {
         return { error: 'Error adding product' };
     }
 };
+
+
+export const initSession = async (login_data) => {
+    try{
+        const response = await api.post('/login',login_data)
+        return response.data
+    }catch(error){
+        console.error('Error in login : ',error);
+        return {error: 'Error in login init'};
+    }
+}
