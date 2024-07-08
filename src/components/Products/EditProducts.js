@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getProducts, addProduct } from '../api/api';
+import { getProducts, addProduct } from '../../api/api';
 
-const Products = () => {
+const EditProducts = () => {
     const [productos, setProductos] = useState([]);
     const [newProduct, setNewProduct] = useState({
         nombre: '',
@@ -122,4 +122,4 @@ const Products = () => {
     );
 };
 
-export default Products;
+export default EditProducts;
