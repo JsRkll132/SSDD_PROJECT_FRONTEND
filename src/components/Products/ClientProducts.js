@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getProducts, addProduct } from '../../api/api';
+import { getProducts, addProduct,AddToCar } from '../../api/api';
 import { show_alert } from '../functions';
-
+import { Await, useNavigate } from 'react-router-dom';
 const ClientProducts = () => {
     const [productos, setProductos] = useState([]);
     const [newProduct, setNewProduct] = useState({
@@ -11,9 +11,14 @@ const ClientProducts = () => {
         stock: '',
         url_imagen: ''
     });
+    const [datasend, sendProduct] = useState({
+        carrito_id:'',
+        producto_id:'',
+        cantidad:'',
+    });
     const [title, setTitle] = useState('');
     const [productosComprados, setProductosComprados] = useState([]);
-
+    const navigate = useNavigate(); 
     useEffect(() => {
         const fetchProducts = async () => {
             const data = await getProducts();
@@ -48,12 +53,25 @@ const ClientProducts = () => {
 
     };
 
-    const comprarProducto = (productoId) => {
+    const addToCar = async (producto) => {
         // Verifica si el producto ya ha sido comprado
-        if (!productosComprados.includes(productoId)) {
+        if (!productosComprados.includes(producto.id)) {
             // Agrega el producto a la lista de comprados
-            setProductosComprados([...productosComprados, productoId]);
-            show_alert('Producto comprado correctamente.', 'success');
+            setProductosComprados([...productosComprados, producto.id]);
+            sendProduct()
+    
+            const response = await AddToCar({
+                carrito_id:1,
+                producto_id:producto.id,
+                cantidad:1,
+            })
+                if (response && response.status ===1  ) {
+                    console.log(response)
+                }else{
+                    console.log(response.status)
+                }      
+   
+            navigate('/productos/addCar')
         } else {
             show_alert('Este producto ya ha sido comprado.', 'danger');
         }
@@ -61,7 +79,13 @@ const ClientProducts = () => {
 
     return (
         <div className="App">
-            <h2>Productos</h2>
+        <nav className="navbar navbar-dark bg-primary">
+            <div className="container-fluid">
+            <button type="button" class="btn btn-danger m-lg-auto" onClick={() => {navigate('/login')}}>Salir</button>
+            <button type="button" className="btn btn-secondary m-lg-auto " onClick={() => {navigate('/productos/addCar')}}>Ver Carrito</button>
+            </div>
+        </nav>
+        <h2 style={{padding:"30px",textAlign:"center"}}>Productos</h2>
             <div className='row justify-content-center mt-3'>
                 <div className='col-12 col-lg-8'>
                     <div className='table-responsive'>
@@ -77,7 +101,8 @@ const ClientProducts = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {productos.map((producto, index) => (
+                                {
+                                    productos.map((producto, index) => (
                                     <tr key={producto.id}>
                                         <td>{index + 1}</td>
                                         <td>{producto.nombre}</td>
@@ -87,15 +112,16 @@ const ClientProducts = () => {
                                         <td>
                                             <button
                                                 className={`btn btn-success ${productosComprados.includes(producto.id) ? 'disabled' : ''}`}
-                                                onClick={() => comprarProducto(producto.id)}
+                                                onClick={() => addToCar(producto)}
                                                 disabled={productosComprados.includes(producto.id)}
                                             >
-                                                <i className='fas fa-shopping-cart'></i> Comprar
+                                                <i className='fas fa-shopping-cart'></i> 
                                             </button>
                                    
                                         </td>
                                     </tr>
-                                ))}
+                                ))
+                            }
                             </tbody>
                         </table>
                     </div>

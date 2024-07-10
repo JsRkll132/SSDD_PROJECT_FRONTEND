@@ -24,9 +24,9 @@ export const getProducts = async () => {
     }
 };
 
-export const generateOrder = async (cliente_id, items) => {
+export const generateOrder = async (data_client) => {
     try {
-        const response = await api.post('/generar_orden', { cliente_id, items });
+        const response = await api.post('/generar_orden',data_client);
         return response.data;
     } catch (error) {
         console.error('Error generating order:', error);
@@ -94,3 +94,25 @@ export const initSession = async (login_data) => {
         return {error: 'Error in login init'};
     }
 }
+export const getCarsItems = async () => {
+    try {
+        const response = await api.get('/productos_en_carritos');
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        return [];
+    }
+};
+
+export const AddToCar = async (new_data) => {
+    try{
+        if (new_data!==null){
+            const response = await api.post('/addtoCar',new_data)
+            return response.data
+        }
+        
+    }catch(error){
+        console.error('Error in login : ',error);
+        return {error: 'Error in login init'};
+    }
+ }

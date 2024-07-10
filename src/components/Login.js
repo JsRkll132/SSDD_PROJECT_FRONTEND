@@ -1,6 +1,6 @@
-import {React,useState,useEffect } from 'react';
+import {React,useState } from 'react';
 import { initSession } from '../api/api';
-import { Navigate, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { show_alert } from './functions';
 //import './Login.css'; // Asegúrate de importar tus estilos CSS
 
@@ -17,9 +17,12 @@ const Login = () => {
     
     const handleLoginUser = async () => {
         const response = await initSession(userLogin);
-        if (response && response.status ===1) {
+        if (response && response.status ===1 && response.data_info.rol===1 ) {
             console.log(response)
             navigate('/productos')
+        }else if (response && response.status ===1 && response.data_info.rol>1){
+            console.log(response)
+            navigate('/admin')
         }else{
             console.log(response.status)
             show_alert(response.error,"passid")
