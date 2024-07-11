@@ -79,7 +79,7 @@ const ClientProducts = () => {
 
     return (
         <div className="App">
-        <nav className="navbar navbar-dark bg-primary">
+        <nav className="navbar navbar-dark bg-primary" style={{ color: '#d1e8e2' }}>
             <div className="container-fluid">
             <button type="button" class="btn btn-danger m-lg-auto" onClick={() => {navigate('/login')}}>Salir</button>
             <button type="button" className="btn btn-secondary m-lg-auto " onClick={() => {navigate('/productos/addCar')}}>Ver Carrito</button>
@@ -113,7 +113,7 @@ const ClientProducts = () => {
                                             <button
                                                 className={`btn btn-success ${productosComprados.includes(producto.id) ? 'disabled' : ''}`}
                                                 onClick={() => addToCar(producto)}
-                                                disabled={productosComprados.includes(producto.id)}
+                                                disabled={producto.stock == 0}
                                             >
                                                 <i className='fas fa-shopping-cart'></i> 
                                             </button>

@@ -97,7 +97,10 @@ export const initSession = async (login_data) => {
 export const getCarsItems = async () => {
     try {
         const response = await api.get('/productos_en_carritos');
-        return response.data.data;
+        if (response.data.data!=null){
+            return response.data.data;
+        }
+        
     } catch (error) {
         console.error('Error fetching products:', error);
         return [];
@@ -114,5 +117,18 @@ export const AddToCar = async (new_data) => {
     }catch(error){
         console.error('Error in login : ',error);
         return {error: 'Error in login init'};
+    }
+ }
+
+ export const deleteCarItem = async (new_data) => {
+    try{
+        if (new_data!==null){
+            const response = await api.post('/eliminaritem',new_data)
+            return response.data
+        }
+        
+    }catch(error){
+        console.error('Error in delete ',error);
+        return {error: 'Error in delete item from car'};
     }
  }

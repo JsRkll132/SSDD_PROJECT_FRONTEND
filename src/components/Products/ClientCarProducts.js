@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getProducts, getCarsItems,AddToCar, generateOrder } from '../../api/api';
+import { getProducts, getCarsItems,AddToCar, generateOrder,deleteCarItem  } from '../../api/api';
 import { show_alert } from '../functions';
-
+import { useNavigate } from 'react-router-dom';
 const ClientCarProducts = () => {
     const [productos, setProductos] = useState([]);
     const [carrito, setCarrito] = useState([]);
@@ -9,6 +9,7 @@ const ClientCarProducts = () => {
     const [items,UpdateItemInCar] = useState([])
     const [total, setTotal] = useState(0);
     const [clientid, setCurrClient] = useState(1);
+    const navigate = useNavigate(); 
     useEffect(() => {
         const fetchProducts = async () => {
             const data = await getCarsItems();
@@ -48,17 +49,15 @@ const ClientCarProducts = () => {
         }
     };
 
-    const removeFromCart = (producto) => {
-        const existente = carrito.find((item) => item.id === producto.id);
-        if (existente.cantidad === 1) {
-            setCarrito(carrito.filter((item) => item.id !== producto.id));
-        } else {
-            setCarrito(
-                carrito.map((item) =>
-                    item.id === producto.id ? { ...existente, cantidad: existente.cantidad - 1 } : item
-                )
-            );
+    const removeFromCart = async (producto) => {
+        const response = await deleteCarItem({
+            item_id:producto.item_carrito_id,
+        })
+        if (response) {
+            const data = await getCarsItems();
+            setProductos(data);
         }
+        
     };
 
     const handleQuantityChange = async (e, producto,index) => {
@@ -71,7 +70,7 @@ const ClientCarProducts = () => {
                 producto_id:producto.id_producto,
                 cantidad:value,}
 
-            if (items[index].carrito_id!==''){
+            if (items[index].carrito_id!==null || items[index].carrito_id!==''){
                 const response = await AddToCar(items[index])
                 if (response && response.status ===1  ) {
                     console.log(response)
@@ -100,6 +99,12 @@ const ClientCarProducts = () => {
     } 
     return (
         <div className="App">
+            <nav className="navbar navbar-dark bg-primary"  style={{ color: '#d1e8e2' }}>
+                <div className="container-fluid">
+                <button type="button" class="btn btn-secondary" onClick={() => {navigate('/productos')} } style={{marginLeft:"40px"}}>Regresar</button>
+               
+                </div>
+                </nav>
             <h2 style={{padding:"30px",textAlign:"center"}}>Carrito de compras</h2>
             <div className="row justify-content-center mt-3">
                 <div className="col-12 col-lg-8" >
@@ -135,7 +140,7 @@ const ClientCarProducts = () => {
                                         </td>
                                         <td>{calcularPrecioTotal(producto, index)}</td>
                                         <td >
-                                            <button className="btn btn-outline-danger">
+                                            <button className="btn btn-outline-danger" onClick={() => removeFromCart(producto)}>
                                                 <i className="fa-solid fa-rectangle-xmark"></i>
                                             </button>
                                         </td>
