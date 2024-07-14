@@ -132,3 +132,37 @@ export const AddToCar = async (new_data) => {
         return {error: 'Error in delete item from car'};
     }
  }
+
+
+ export const AllOrders = async () => {
+    try{
+        const response = await api.get('/ordenes');
+        if (response.data.status===1){
+            return response.data.ordenes   
+        }else{
+            console.log('Error al obtener las ordenes ');
+            return {error : 'Error al obtener las ordenes'};
+        }
+        
+        
+        
+    }catch(error){
+        console.error('Error in delete ',error);
+        return {error: 'Error in delete item from car'};
+    }
+ }
+
+ export const OrderDetailById = async (orden_id) => {
+    try {
+        const response = await api.get(`/ordenes/${orden_id}`);
+        if (response.data.status === 1) {
+            return response.data.orden;
+        } else {
+            console.log('Error al obtener la orden');
+            return { error: 'Error al obtener la orden' };
+        }
+    } catch (error) {
+        console.error('Error al obtener los detalles de la orden', error);
+        return { error: 'Error al obtener los detalles de la orden' };
+    }
+};

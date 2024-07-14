@@ -13,8 +13,12 @@ const AdminPanel = () =>{
               <Link to="productos">Producto</Link>
             </li>
             <li>
+              <Link to="ventas">Ventas</Link>
+            </li>
+            <li>
               <Link to="settings">Settings</Link>
             </li>
+            
           </ul>
         </nav>
         <Outlet></Outlet>

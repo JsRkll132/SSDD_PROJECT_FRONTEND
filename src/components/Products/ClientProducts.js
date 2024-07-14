@@ -78,19 +78,39 @@ const ClientProducts = () => {
     };
 
     return (
-        <div className="App">
-        <nav className="navbar navbar-dark bg-primary" style={{ color: '#d1e8e2' }}>
-            <div className="container-fluid">
-            <button type="button" class="btn btn-danger m-lg-auto" onClick={() => {navigate('/login')}}>Salir</button>
-            <button type="button" className="btn btn-secondary m-lg-auto " onClick={() => {navigate('/productos/addCar')}}>Ver Carrito</button>
-            </div>
+        <div className="App"> 
+
+        <nav className="navbar navbar-expand-lg navbar-light bg-primary">
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul className="navbar-nav ml-auto">
+        <li className="nav-item active mx-5">
+            <a className="nav-link" href="" onClick={() => { navigate('/productos') }}>Productos Disponibles<span className="sr-only">(current)</span></a>
+            <button className="navbar-toggler" type="button" data-toggle="collapse" onClick={() => { navigate('/productos') }} data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon"></span>
+        </button>
+            </li>
+            <li className="nav-item active mx-3">
+            <a className="nav-link" href="" onClick={() => { navigate('/productos/compras') }}>Compras<span className="sr-only">(current)</span></a>
+            </li>
+            <li className="nav-item active mx-3">
+            <a className="nav-link" href="" onClick={() => { navigate('/productos/addCar') }}>Mi carrito<span className="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <form className="form-inline my-2 " style={{marginLeft:"900px"}}>
+            <button className="btn btn-outline-danger" onClick={() => { navigate('/login') }} type="submit">Salir</button>
+        </form>
+        </div>
         </nav>
+
+
+
+        
         <h2 style={{padding:"30px",textAlign:"center"}}>Productos</h2>
             <div className='row justify-content-center mt-3'>
                 <div className='col-12 col-lg-8'>
                     <div className='table-responsive'>
-                        <table className="table table-bordered text-center">
-                            <thead className="table-dark">
+                        <table className="table  text-center">
+                            <thead className="thead-dark">
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Nombre</th>
