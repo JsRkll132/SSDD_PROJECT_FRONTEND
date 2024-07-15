@@ -114,7 +114,7 @@ const ClientCarProducts = () => {
             <a className="nav-link" href="" onClick={() => { navigate('/productos/compras') }}>Compras<span className="sr-only">(current)</span></a>
             </li>
             <li className="nav-item active mx-3">
-            <a className="nav-link" href="" onClick={() => { navigate('/productos/addCar') }}>Mi carrito<span className="sr-only">(current)</span></a>
+            <a className="nav-link" href="" onClick={() => { navigate('/productos/addCar') }}><b>Mi carrito</b><span className="sr-only">(current)</span></a>
             </li>
         </ul>
         <form className="form-inline my-2 " style={{marginLeft:"900px"}}>
@@ -141,16 +141,16 @@ const ClientCarProducts = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {productos.map((producto, index) => (
-                                    <tr key={producto.id}>
+                                {productos?.map((producto, index) => (
+                                    <tr key={producto?.id}>
                                         <td>{index + 1}</td>
-                                        <td>{producto.nombre_producto}</td>
-                                        <td>{producto.precio}</td>
+                                        <td>{producto?.nombre_producto}</td>
+                                        <td>{producto?.precio}</td>
                                         <td>
                                             <div className="d-flex justify-content-center align-items-center" style={{ width: "4.5rem" }}>
                                                 <input
                                                     min="0"
-                                                    max={producto.stock}
+                                                    max={producto?.stock}
                                                     type="number"
                                                     className="form-control text-center"
                                                     value={quantities[index] || 0}

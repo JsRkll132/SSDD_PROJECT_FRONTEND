@@ -26,7 +26,7 @@ const ClientPayBuys = () => {
                             </button>
                         </li>
                         <li className="nav-item active mx-3">
-                            <a className="nav-link" href="" onClick={() => { navigate('/productos/compras') }}>Compras<span className="sr-only">(current)</span></a>
+                            <a className="nav-link" href="" onClick={() => { navigate('/productos/compras') }}><b>Compras</b><span className="sr-only">(current)</span></a>
                         </li>
                         <li className="nav-item active mx-3">
                             <a className="nav-link" href="" onClick={() => { navigate('/productos/addCar') }}>Mi carrito<span className="sr-only">(current)</span></a>

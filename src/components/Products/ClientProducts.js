@@ -83,8 +83,9 @@ const ClientProducts = () => {
         <nav className="navbar navbar-expand-lg navbar-light bg-primary">
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav ml-auto">
+        
         <li className="nav-item active mx-5">
-            <a className="nav-link" href="" onClick={() => { navigate('/productos') }}>Productos Disponibles<span className="sr-only">(current)</span></a>
+            <a className="nav-link" href="" onClick={() => { navigate('/productos') }}> <b>Productos Disponibles</b><span className="sr-only">(current)</span></a>
             <button className="navbar-toggler" type="button" data-toggle="collapse" onClick={() => { navigate('/productos') }} data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
         </button>
@@ -122,7 +123,7 @@ const ClientProducts = () => {
                             </thead>
                             <tbody>
                                 {
-                                    productos.map((producto, index) => (
+                                    productos?.map((producto, index) => (
                                     <tr key={producto.id}>
                                         <td>{index + 1}</td>
                                         <td>{producto.nombre}</td>

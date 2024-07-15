@@ -34,15 +34,6 @@ export const generateOrder = async (data_client) => {
     }
 };
 
-export const confirmOrder = async (orden_id) => {
-    try {
-        const response = await api.post('/confirmar_orden', { orden_id });
-        return response.data;
-    } catch (error) {
-        console.error('Error confirming order:', error);
-        return { error: 'Error confirming order' };
-    }
-};
 
 export const verifyScore = async (cliente_id) => {
     try {
@@ -164,5 +155,19 @@ export const AddToCar = async (new_data) => {
     } catch (error) {
         console.error('Error al obtener los detalles de la orden', error);
         return { error: 'Error al obtener los detalles de la orden' };
+    }
+};
+
+
+
+export const confirmOrder = async (order_data) => {
+    try {
+        const response = await api.post('/confirmar_orden', order_data);
+        console.log(response.data.status)
+        return response.data;
+    } catch (error) {
+        console.log('Error confirming order:', error);
+        console.error('Error confirming order:', error);
+        return { error: 'Error confirming order' };
     }
 };

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { OrderDetailById } from '../../api/api';
+import { OrderDetailById, confirmOrder } from '../../api/api';
 
 const ClientOrderInfo = () => {
     const { id_orden } = useParams();
     const [orden, setOrden] = useState(null);
+    const [metodoPago, setMetodoPago] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,6 +15,25 @@ const ClientOrderInfo = () => {
         };
         fetchOrderDetails();
     }, [id_orden]);
+
+    const handleMetodoPagoChange = (e) => {
+        setMetodoPago(e.target.value);
+    };
+
+    const handleConfirmOrder = async () => {
+        if (!metodoPago) {
+            alert("Por favor, seleccione un método de pago.");
+            return;
+        }
+        const ordenIdInt = parseInt(id_orden, 10)
+        const response = await confirmOrder({ orden_id: ordenIdInt, metodo_pago: metodoPago });
+        if (response.error) {
+            alert(response.error);
+        } else {
+            alert("Orden confirmada exitosamente.");
+            navigate('/productos/compras'); // Navegar de vuelta a la lista de compras
+        }
+    };
 
     if (!orden) {
         return <div>Loading...</div>;
@@ -31,10 +51,10 @@ const ClientOrderInfo = () => {
                             </button>
                         </li>
                         <li className="nav-item active mx-3">
-                            <a className="nav-link" href="" onClick={() => { navigate('/productos/compras') }}>Compras<span className="sr-only">(current)</span></a>
+                            <a className="nav-link" href="" onClick={() => { navigate('/productos/compras') }}> <b> Compras</b><span className="sr-only">(current)</span></a>
                         </li>
                         <li className="nav-item active mx-3">
-                            <a className="nav-link" href="" onClick={() => { navigate('/productos/addCar') }}>Mi carrito<span className="sr-only">(current)</span></a>
+                            <a className="nav-link" href="" onClick={() => { navigate('/productos/addCar') }}> Mi carrito<span className="sr-only">(current)</span></a>
                         </li>
                     </ul>
                     <form className="form-inline my-2" style={{ marginLeft: "900px" }}>
@@ -58,20 +78,26 @@ const ClientOrderInfo = () => {
                                         <li key={index} className="list-group-item">
                                             <div>Producto: {detalle.nombre_producto}</div>
                                             <div>Cantidad: {detalle.cantidad}</div>
-                                            <div>Precio: {detalle.precio_compra}</div>
+                                            <div>Precio unitario: {detalle.precio_compra}</div>
+                                            <div>Precio total: {detalle.precio_compra * detalle.cantidad}</div>
                                         </li>
                                     ))}
                                 </ul>
                                 <div className="text-center">
                                     <div className="d-flex justify-content-center align-items-center mt-3">
                                         <div className="dropdown me-3">
-                                            <select className="form-select" aria-label="Default select example">
-                                                <option selected>Metodo de pago</option>
-                                                <option value="1">Score Crediticio</option>
-                                                <option value="2">Normal</option>
+                                            <select 
+                                                className="form-select" 
+                                                aria-label="Default select example"
+                                                value={metodoPago}
+                                                onChange={handleMetodoPagoChange}
+                                            >
+                                                <option value="" selected disabled>Método de pago</option>
+                                                <option value="score_crediticio">Score Crediticio</option>
+                                                <option value="credito">Crédito</option>
                                             </select>
                                         </div>
-                                        <button className="btn btn-primary" onClick={() => {}}>
+                                        <button className="btn btn-success" onClick={handleConfirmOrder}>
                                             Confirmar orden de compra
                                         </button>
                                     </div>
