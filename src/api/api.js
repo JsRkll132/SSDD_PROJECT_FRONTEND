@@ -171,3 +171,24 @@ export const confirmOrder = async (order_data) => {
         return { error: 'Error confirming order' };
     }
 };
+
+export const updateProduct = async (producto_id, productData) => {
+    try {
+        const response = await api.put(`/productos/${producto_id}`, productData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating product:', error);
+        return { error: 'Error updating product' };
+    }
+};
+
+
+export const deleteProduct = async (producto_id) => {
+    try {
+        const response = await api.delete(`/productos/${producto_id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        return { error: 'Error deleting product' };
+    }
+};
