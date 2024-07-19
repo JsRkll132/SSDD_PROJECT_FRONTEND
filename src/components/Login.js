@@ -1,36 +1,58 @@
-import {React,useState } from 'react';
+import React, { useState } from 'react';
 import { initSession } from '../api/api';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { show_alert } from './functions';
-//import './Login.css'; // Asegúrate de importar tus estilos CSS
-
-
+import useSignIn from 'react-auth-kit/hooks/useSignIn';
+import useSignOut from 'react-auth-kit/hooks/useSignOut';
 const Login = () => {
-    const [userLogin, sendData] = useState({
-        username: '',
-        password:'',
+    const [userLogin, setUserLogin] = useState({
+        nombre_usuario: '',
+        contrasena: '',
     });
+
     const navigate = useNavigate();
+    const signIn = useSignIn()
+    const signOut = useSignOut()
     const handleChange = (e) => {
-        sendData({ ...userLogin, [e.target.name]: e.target.value });
+        setUserLogin({ ...userLogin, [e.target.name]: e.target.value });
     };
-    
+
     const handleLoginUser = async () => {
-        const response = await initSession(userLogin);
-        if (response && response.status ===1 && response.data_info.rol===1 ) {
-            console.log(response)
-            navigate('/productos')
-        }else if (response && response.status ===1 && response.data_info.rol>1){
-            console.log(response)
-            navigate('/admin')
-        }else{
-            console.log(response.status)
-            show_alert(response.error,"passid")
+        try {
+            const response = await initSession(userLogin);
+            if (response && response.status === 1) {
+                const { rol, id, nombre_usuario, correo } = response.data_info;
+                signIn({
+                    auth: {
+                        token: response.token,
+                        type: 'Bearer'
+                    },
+                    userState: response.data_info
+                })
+                /*
+                signIn({
+                    token: response.token, // Assuming the API returns a token
+                    expiresIn: 3600,
+                    tokenType: 'Bearer',
+                    authState: response.data_info
+                });*/
+                
+                if (response.data_info.rol === 1) {
+                    navigate('/productos');
+                } else if (response.data_info.rol > 1) {
+                    navigate('/admin');
+                }
+            } else {
+                alert(response?.status);
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Error de conexión con el servidor');
         }
     };
 
     return (
-        <div className="align-items-center vh-100" style={{alignItems:'center'}}>
+        <div className="align-items-center vh-100" style={{ alignItems: 'center' }}>
             <div className="col-sm-6 text-black">
                 <div className="px-5 ms-xl-4">
                     <i className="fa-solid fa-store fa-3x me-3 pt-5 mt-xl-4" style={{ color: '#709085' }}></i>
@@ -38,38 +60,36 @@ const Login = () => {
                 </div>
                 <div className="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
                     <form style={{ width: '32rem' }}>
-                        <h3 className="fw-normal mb-3 pb-3" style={{ letterSpacing: '1px' }}>Iniciar Sesion</h3>
+                        <h3 className="fw-normal mb-3 pb-3" style={{ letterSpacing: '1px' }}>Iniciar Sesión</h3>
                         <div className="form-outline mb-4">
-                        <input 
-                        type="email" 
-                        id="form2Example18" 
-                        className="form-control form-control-sm" 
-                        style={{ fontSize: '1.5rem' }} 
-                        name="username" 
-                        value={userLogin.username} 
-                        onChange={handleChange} 
-                    />
-                            <label className="form-label" htmlFor="form2Example18" style={{marginTop:"10px"}}>Correo</label>
+                            <input
+                                type="text"
+                                id="form2Example18"
+                                className="form-control form-control-sm"
+                                style={{ fontSize: '1.5rem' }}
+                                name="nombre_usuario"
+                                value={userLogin.nombre_usuario}
+                                onChange={handleChange}
+                            />
+                            <label className="form-label" htmlFor="form2Example18" style={{ marginTop: "10px" }}>Nombre de Usuario</label>
                         </div>
                         <div className="form-outline mb-4">
-                    
-                         <input 
-                            type="password" 
-                            id="form2Example28" 
-                            className="form-control form-control-sm" 
-                            style={{ fontSize: '1.5rem' }} 
-                            name="password" 
-                            value={userLogin.password} 
-                            onChange={handleChange} 
-
-                        />
-                        <label id='passid' className="form-label" htmlFor="form2Example28"  style={{marginTop:"10px"}}>Contraseña</label>
+                            <input
+                                type="password"
+                                id="form2Example28"
+                                className="form-control form-control-sm"
+                                style={{ fontSize: '1.5rem' }}
+                                name="contrasena"
+                                value={userLogin.contrasena}
+                                onChange={handleChange}
+                            />
+                            <label id='passid' className="form-label" htmlFor="form2Example28" style={{ marginTop: "10px" }}>Contraseña</label>
                         </div>
                         <div className="pt-1 mb-4">
-                            <button className="btn btn-dark btn-lg btn-block" type="button" onClick={handleLoginUser}>Iniciar Sesion</button>
+                            <button className="btn btn-dark btn-lg btn-block" type="button" onClick={handleLoginUser}>Iniciar Sesión</button>
                         </div>
-                        <p className="small mb-5 pb-lg-2"><a className="text-muted" href="#!">Olvide mi contraseña</a></p>
-                        <p>No tienes una cuenta?      <a href="#!" className="link-primary">Registrarse aqui</a></p>
+                        <p className="small mb-5 pb-lg-2"><a className="text-muted" href="#!">Olvidé mi contraseña</a></p>
+                        <p>No tienes una cuenta? <a href="#!" className="link-primary">Registrarse aquí</a></p>
                     </form>
                 </div>
             </div>

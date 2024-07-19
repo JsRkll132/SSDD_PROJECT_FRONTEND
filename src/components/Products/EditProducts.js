@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getProducts, addProduct, updateProduct, deleteProduct } from '../../api/api';
 import { show_alert } from '../functions';
-
+import useSignOut from 'react-auth-kit/hooks/useSignOut';
 const EditProducts = () => {
     const [productos, setProductos] = useState([]);
     const [currentProductId, setCurrentProductId] = useState(null); // Para almacenar el ID del producto actual al editar/eliminar
@@ -25,7 +25,7 @@ const EditProducts = () => {
     const handleChange = (e) => {
         setNewProduct({ ...newProduct, [e.target.name]: e.target.value });
     };
-
+    const signOut = useSignOut()
     const handleSaveProduct = async () => {
         if (currentProductId === null) {
             // Añadir nuevo producto

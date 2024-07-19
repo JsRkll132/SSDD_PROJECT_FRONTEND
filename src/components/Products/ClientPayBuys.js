@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AllOrders } from '../../api/api';
-
+import useSignOut from 'react-auth-kit/hooks/useSignOut';
 const ClientPayBuys = () => {
     const [ordenes, setOrdenes] = useState([]);
     const navigate = useNavigate();
-
+    const signOut = useSignOut()
     useEffect(() => {
         const fetchOrders = async () => {
             const data = await AllOrders();
@@ -33,7 +33,7 @@ const ClientPayBuys = () => {
                         </li>
                     </ul>
                     <form className="form-inline my-2" style={{ marginLeft: "900px" }}>
-                        <button className="btn btn-outline-danger" onClick={() => { navigate('/login') }} type="submit">Salir</button>
+                        <button className="btn btn-outline-danger" onClick={() => { signOut();navigate('/login'); }} type="submit">Salir</button>
                     </form>
                 </div>
             </nav>

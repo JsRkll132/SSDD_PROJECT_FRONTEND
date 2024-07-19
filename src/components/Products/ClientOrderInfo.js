@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { OrderDetailById, confirmOrder } from '../../api/api';
-
+import useSignOut from 'react-auth-kit/hooks/useSignOut';
 const ClientOrderInfo = () => {
     const { id_orden } = useParams();
     const [orden, setOrden] = useState(null);
     const [metodoPago, setMetodoPago] = useState('');
     const navigate = useNavigate();
-
+    const signOut = useSignOut()
     useEffect(() => {
         const fetchOrderDetails = async () => {
             const data = await OrderDetailById(parseInt(id_orden, 10));
@@ -58,7 +58,7 @@ const ClientOrderInfo = () => {
                         </li>
                     </ul>
                     <form className="form-inline my-2" style={{ marginLeft: "900px" }}>
-                        <button className="btn btn-outline-danger" onClick={() => { navigate('/login') }} type="submit">Salir</button>
+                        <button className="btn btn-outline-danger" onClick={() => { signOut();navigate('/login'); }} type="submit">Salir</button>
                     </form>
                 </div>
             </nav>

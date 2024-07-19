@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getProducts, getCarsItems,AddToCar, generateOrder,deleteCarItem  } from '../../api/api';
 import { show_alert } from '../functions';
 import { useNavigate } from 'react-router-dom';
+import useSignOut from 'react-auth-kit/hooks/useSignOut';
 const ClientCarProducts = () => {
     const [productos, setProductos] = useState([]);
     const [carrito, setCarrito] = useState([]);
@@ -10,6 +11,7 @@ const ClientCarProducts = () => {
     const [total, setTotal] = useState(0);
     const [clientid, setCurrClient] = useState(1);
     const navigate = useNavigate(); 
+    const signOut = useSignOut()
     useEffect(() => {
         const fetchProducts = async () => {
             const data = await getCarsItems();
@@ -118,7 +120,7 @@ const ClientCarProducts = () => {
             </li>
         </ul>
         <form className="form-inline my-2 " style={{marginLeft:"900px"}}>
-            <button className="btn btn-outline-danger" onClick={() => { navigate('/login') }} type="submit">Salir</button>
+            <button className="btn btn-outline-danger" onClick={() => { signOut();navigate('/login'); }} type="submit">Salir</button>
         </form>
         </div>
         </nav>
