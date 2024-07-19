@@ -3,25 +3,28 @@ import { getProducts, getCarsItems,AddToCar, generateOrder,deleteCarItem  } from
 import { show_alert } from '../functions';
 import { useNavigate } from 'react-router-dom';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+
 const ClientCarProducts = () => {
+    const auth = useAuthUser()
     const [productos, setProductos] = useState([]);
     const [carrito, setCarrito] = useState([]);
     const [quantities, setQuantities] = useState([]);
     const [items,UpdateItemInCar] = useState([])
     const [total, setTotal] = useState(0);
-    const [clientid, setCurrClient] = useState(1);
+    const [clientid, setCurrClient] = useState(auth.id);
     const navigate = useNavigate(); 
     const signOut = useSignOut()
     useEffect(() => {
         const fetchProducts = async () => {
-            const data = await getCarsItems();
+            const data = await getCarsItems(auth.id);
             setProductos(data);
             const initialQuantities = [];
             const initItems = [];
             data.forEach(producto => {
                 initialQuantities.push( producto.cantidad_en_carrito);
                 initItems.push({
-                    carrito_id:producto.carrito_id,
+                    usuario_id:producto.usuario_id,
                     producto_id:producto.id_producto,
                     cantidad:producto.cantidad_en_carrito
                 })
@@ -53,10 +56,10 @@ const ClientCarProducts = () => {
 
     const removeFromCart = async (producto) => {
         const response = await deleteCarItem({
-            item_id:producto.item_carrito_id,
+            item_id:producto.item_usuario_id,
         })
         if (response) {
-            const data = await getCarsItems();
+            const data = await getCarsItems(auth.id);
             setProductos(data);
         }
         
@@ -68,11 +71,11 @@ const ClientCarProducts = () => {
             quantities[index]=value;
 
             items[index] = {
-                carrito_id:producto.carrito_id,
+                usuario_id:producto.usuario_id,
                 producto_id:producto.id_producto,
                 cantidad:value,}
 
-            if (items[index].carrito_id!==null || items[index].carrito_id!==''){
+            if (items[index].usuario_id!==null || items[index].usuario_id!==''){
                 const response = await AddToCar(items[index])
                 if (response && response.status ===1  ) {
                     console.log(response)
@@ -80,7 +83,7 @@ const ClientCarProducts = () => {
                     console.log(response.status)
                 }        
             }
-            const updateData = await getCarsItems();
+            const updateData = await getCarsItems(auth.id);
             setProductos(updateData);
           
     };
@@ -96,7 +99,7 @@ const ClientCarProducts = () => {
             usuario_id:client_id
         })
         console.log(resp)
-        const data = await getCarsItems();
+        const data = await getCarsItems(auth.id);
         setProductos(data);
     } 
     return (

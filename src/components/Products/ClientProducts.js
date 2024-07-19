@@ -3,7 +3,10 @@ import { getProducts, addProduct,AddToCar } from '../../api/api';
 import { show_alert } from '../functions';
 import { Await, useNavigate } from 'react-router-dom';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+
 const ClientProducts = () => {
+    const auth = useAuthUser()
     const [productos, setProductos] = useState([]);
     const [newProduct, setNewProduct] = useState({
         nombre: '',
@@ -13,7 +16,7 @@ const ClientProducts = () => {
         url_imagen: ''
     });
     const [datasend, sendProduct] = useState({
-        carrito_id:'',
+        usuario_id:'',
         producto_id:'',
         cantidad:'',
     });
@@ -63,7 +66,7 @@ const ClientProducts = () => {
             sendProduct()
     
             const response = await AddToCar({
-                carrito_id:1,
+                usuario_id:auth.id,
                 producto_id:producto.id,
                 cantidad:1,
             })
@@ -87,7 +90,7 @@ const ClientProducts = () => {
         <ul className="navbar-nav ml-auto">
         
         <li className="nav-item active mx-5">
-            <a className="nav-link" href="" onClick={() => { navigate('/productos') }}> <b>Productos Disponibles</b><span className="sr-only">(current)</span></a>
+            <a className="nav-link" href="" onClick={() => { navigate('/productos') }}> <b>  Productos Disponibles</b><span className="sr-only">(current)</span></a>
             <button className="navbar-toggler" type="button" data-toggle="collapse" onClick={() => { navigate('/productos') }} data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
         </button>

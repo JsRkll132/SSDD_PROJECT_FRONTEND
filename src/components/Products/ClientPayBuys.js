@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AllOrders } from '../../api/api';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 const ClientPayBuys = () => {
     const [ordenes, setOrdenes] = useState([]);
     const navigate = useNavigate();
     const signOut = useSignOut()
+    const auth = useAuthUser()
     useEffect(() => {
         const fetchOrders = async () => {
-            const data = await AllOrders();
+            const data = await AllOrders(auth.id);
             setOrdenes(data);
         };
         fetchOrders();

@@ -87,19 +87,20 @@ export const initSession = async (login_data) => {
         return {error: 'Error in login init'};
     }
 }
-export const getCarsItems = async () => {
+export const getCarsItems = async (usuario_id) => {
     try {
-        const response = await api.get('/productos_en_carritos');
-        if (response.data.data!=null){
+        const response = await api.get('/productos_en_carritos', { params: { usuario_id } });
+        if (response.data.status === 1) {
             return response.data.data;
+        } else {
+            console.log('Error al obtener los productos en el carrito');
+            return { error: 'Error al obtener los productos en el carrito' };
         }
-        
     } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching products in cart:', error);
         return [];
     }
 };
-
 export const AddToCar = async (new_data) => {
     try{
         if (new_data!==null){
@@ -127,24 +128,20 @@ export const AddToCar = async (new_data) => {
  }
 
 
- export const AllOrders = async () => {
-    try{
-        const response = await api.get('/ordenes');
-        if (response.data.status===1){
-            return response.data.ordenes   
-        }else{
-            console.log('Error al obtener las ordenes ');
-            return {error : 'Error al obtener las ordenes'};
+ export const AllOrders = async (usuario_id) => {
+    try {
+        const response = await api.get('/ordenes', { params: { usuario_id } });
+        if (response.data.status === 1) {
+            return response.data.ordenes;
+        } else {
+            console.log('Error al obtener las órdenes');
+            return { error: 'Error al obtener las órdenes' };
         }
-        
-        
-        
-    }catch(error){
-        console.error('Error in delete ',error);
-        return {error: 'Error in delete item from car'};
+    } catch (error) {
+        console.error('Error in fetching orders', error);
+        return { error: 'Error in fetching orders' };
     }
- }
-
+};
  export const OrderDetailById = async (orden_id) => {
     try {
         const response = await api.get(`/ordenes/${orden_id}`);
