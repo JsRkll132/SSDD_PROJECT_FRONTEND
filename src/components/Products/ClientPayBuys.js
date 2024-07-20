@@ -33,8 +33,11 @@ const ClientPayBuys = () => {
                         <li className="nav-item active mx-3">
                             <a className="nav-link" href="" onClick={() => { navigate('/productos/addCar') }}>Mi carrito<span className="sr-only">(current)</span></a>
                         </li>
+                        <li className="nav-item active mx-3">
+                        <a className="nav-link" href="" onClick={() => { navigate('/productos/addCredits') }}>Añadir Credito<span className="sr-only">(current)</span></a>
+                        </li>
                     </ul>
-                    <form className="form-inline my-2" style={{ marginLeft: "900px" }}>
+                    <form className="form-inline my-2" style={{marginLeft:"750px"}}>
                         <button className="btn btn-outline-danger" onClick={() => { signOut();navigate('/login'); }} type="submit">Salir</button>
                     </form>
                 </div>
@@ -43,25 +46,27 @@ const ClientPayBuys = () => {
             <div className="row justify-content-center mt-3">
                 <div className="col-12 col-lg-8">
                     <div className="table-responsive">
-                        <table className="table table-bordered text-center">
-                            <thead>
+                    <table className="table table-bordered text-center" >
+                    <thead className="table-dark">
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">id</th>
-                                    <th scope="col">Usuario</th>
+                             
                                     <th scope="col">Monto</th>
                                     <th scope="col">Fecha</th>
+                                    <th scope="col">Estado</th>
                                     <th scope="col">Detalles</th>
                                 </tr>
                             </thead>
                             <tbody className="table-group-divider">
-                                {ordenes.map((orden, index) => (
+                                {ordenes?.map((orden, index) => (
                                     <tr key={orden.id}>
                                         <td>{index + 1}</td>
                                         <td>{orden.id}</td>
-                                        <td>{orden.nombre_usuario}</td>
+                                     
                                         <td>{orden.monto_total}</td>
                                         <td>{orden.fecha_creacion}</td>
+                                        <td>{orden.estado}</td>
                                         <td>
                                             <button
                                                 className={"btn btn-warning"}

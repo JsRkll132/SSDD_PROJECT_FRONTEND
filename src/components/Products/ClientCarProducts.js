@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getProducts, getCarsItems,AddToCar, generateOrder,deleteCarItem  } from '../../api/api';
+import { getProducts, getCarsItems,AddToCar, generateOrder,deleteCartItem } from '../../api/api';
 import { show_alert } from '../functions';
 import { useNavigate } from 'react-router-dom';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
@@ -55,8 +55,9 @@ const ClientCarProducts = () => {
     };
 
     const removeFromCart = async (producto) => {
-        const response = await deleteCarItem({
-            item_id:producto.item_usuario_id,
+        const response = await deleteCartItem({
+            usuario_id:auth.id,
+            producto_id:producto.id_producto,
         })
         if (response) {
             const data = await getCarsItems(auth.id);
@@ -121,8 +122,11 @@ const ClientCarProducts = () => {
             <li className="nav-item active mx-3">
             <a className="nav-link" href="" onClick={() => { navigate('/productos/addCar') }}><b>Mi carrito</b><span className="sr-only">(current)</span></a>
             </li>
+            <li className="nav-item active mx-3">
+            <a className="nav-link" href="" onClick={() => { navigate('/productos/addCredits') }}>Añadir Credito<span className="sr-only">(current)</span></a>
+            </li>
         </ul>
-        <form className="form-inline my-2 " style={{marginLeft:"900px"}}>
+        <form className="form-inline my-2 " style={{marginLeft:"750px"}}>
             <button className="btn btn-outline-danger" onClick={() => { signOut();navigate('/login'); }} type="submit">Salir</button>
         </form>
         </div>
@@ -184,14 +188,7 @@ const ClientCarProducts = () => {
                     </div>
                     <div className="text-center">
                         <div class="d-flex justify-content-center align-items-center">
-                            <div class="dropdown me-3">
-                            <select class="form-select" aria-label="Default select example">
-                            <option selected>Metodo de pago</option>
-                            <option value="1">Score Crediticio</option>
-                            <option value="2">Normal</option>
-                        
-                          </select>
-                            </div>
+                            
                             <button className="btn btn-primary" onClick={() => generateOrderCli(clientid)}>
                                 Confirmar orden de compra
                             </button>

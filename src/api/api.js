@@ -114,19 +114,15 @@ export const AddToCar = async (new_data) => {
     }
  }
 
- export const deleteCarItem = async (new_data) => {
-    try{
-        if (new_data!==null){
-            const response = await api.post('/eliminaritem',new_data)
-            return response.data
-        }
-        
-    }catch(error){
-        console.error('Error in delete ',error);
-        return {error: 'Error in delete item from car'};
+ export const deleteCartItem = async (data) => {
+    try {
+        const response = await api.post('/eliminaritem', data);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting cart item:', error);
+        return { error: 'Error deleting cart item' };
     }
- }
-
+};
 
  export const AllOrders = async (usuario_id) => {
     try {

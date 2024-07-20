@@ -9,6 +9,7 @@ import ClientPayBuys from "./components/Products/ClientPayBuys";
 import ClientOrderInfo from "./components/Products/ClientOrderInfo";
 import RequireAuth from "@auth-kit/react-router/RequireAuth";
 import AuthOutlet from "@auth-kit/react-router/AuthOutlet";
+import ClientAddCredit from "./components/Products/ClientAddCredit";
 function App() {
   return (
    <BrowserRouter>
@@ -33,6 +34,8 @@ function App() {
               </Route > 
               <Route path = '/productos/compras/info/:id_orden' element = {<ClientOrderInfo></ClientOrderInfo>}>
                 </Route >
+            <Route path = '/productos/addCredits' element = {<ClientAddCredit ></ClientAddCredit>}>
+            </Route > 
        </Route>
 
         
