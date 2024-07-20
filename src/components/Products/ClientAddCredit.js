@@ -24,9 +24,7 @@ const ClientAddCredit = () => {
             <li className="nav-item active mx-3">
             <a className="nav-link" href="" onClick={() => { navigate('/productos/addCar') }}>Mi carrito<span className="sr-only">(current)</span></a>
             </li>
-            <li className="nav-item active mx-3">
-            <a className="nav-link" href="" onClick={() => { navigate('/productos/addCredits') }}><b>Añadir Credito</b><span className="sr-only">(current)</span></a>
-            </li>
+        
         </ul>
         <form className="form-inline my-2 " style={{marginLeft:"750px"}}>
             <button className="btn btn-outline-danger" onClick={() => { signOut();navigate('/login'); }} type="submit">Salir</button>

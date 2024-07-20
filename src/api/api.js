@@ -163,7 +163,7 @@ export const confirmOrder = async (order_data) => {
     } catch (error) {
         console.log('Error confirming order:', error);
         console.error('Error confirming order:', error);
-        return { error: 'Error confirming order' };
+        return { error: error.response.data };
     }
 };
 

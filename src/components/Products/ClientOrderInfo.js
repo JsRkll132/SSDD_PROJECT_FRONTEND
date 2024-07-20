@@ -25,10 +25,14 @@ const ClientOrderInfo = () => {
             alert("Por favor, seleccione un método de pago.");
             return;
         }
+        if (orden.estado==='Confirmada'){
+            alert("La orden ya se encuentra confirmada.")
+            return;
+        }
         const ordenIdInt = parseInt(id_orden, 10)
         const response = await confirmOrder({ orden_id: ordenIdInt, metodo_pago: metodoPago });
         if (response.error) {
-            alert(response.error);
+            alert(response.error.error);
         } else {
             alert("Orden confirmada exitosamente.");
             navigate('/productos/compras'); // Navegar de vuelta a la lista de compras
@@ -56,9 +60,7 @@ const ClientOrderInfo = () => {
                         <li className="nav-item active mx-3">
                             <a className="nav-link" href="" onClick={() => { navigate('/productos/addCar') }}> Mi carrito<span className="sr-only">(current)</span></a>
                         </li>
-                        <li className="nav-item active mx-3">
-                        <a className="nav-link" href="" onClick={() => { navigate('/productos/addCredits') }}>Añadir Credito<span className="sr-only">(current)</span></a>
-                        </li>
+                
                     </ul>
                     <form className="form-inline my-2" style={{marginLeft:"750px"}}>
                         <button className="btn btn-outline-danger" onClick={() => { signOut();navigate('/login'); }} type="submit">Salir</button>
@@ -96,8 +98,8 @@ const ClientOrderInfo = () => {
                                                 onChange={handleMetodoPagoChange}
                                             >
                                                 <option value="" selected disabled>Método de pago</option>
-                                                <option value="score_crediticio">Score Crediticio</option>
-                                                <option value="credito">Crédito</option>
+                                                <option value="diferido">Diferido</option>
+                                                <option value="efectivo">Efectivo</option>
                                             </select>
                                         </div>
                                         <button className="btn btn-success" onClick={handleConfirmOrder}>
